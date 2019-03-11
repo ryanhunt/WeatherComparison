@@ -8,15 +8,16 @@ from geopy.geocoders import Bing
 import datetime
 import csv
 from tqdm import tqdm
+import os
 
-#a = AccuWeather(ACCUWEATHER_API_KEY)
-w = willyweather(WILLWEATHER_API_KEY)
-a = AccuWeather(ACCUWEATHER_API_KEY) 
-o = OpenWeatherMap(OPENWEATHERMAP_API_KEY)
+#a = AccuWeather(os.environ.get('ACCUWEATHER_API_KEY'))
+w = willyweather(os.environ.get('WILLWEATHER_API_KEY'))
+a = AccuWeather(os.environ.get('ACCUWEATHER_API_KEY'))
+o = OpenWeatherMap(os.environ.get('OPENWEATHERMAP_API_KEY'))
 
 
-#geolocator = Nominatim(user_agent=NOMINATIM_USER_AGENT)
-geolocator = Bing(BING_API_KEY)
+#geolocator = Nominatim(user_agent=os.environ.get('NOMINATIM_USER_AGENT'))
+geolocator = Bing(os.environ.get('BING_API_KEY'))
 #addresses = []
 
 
