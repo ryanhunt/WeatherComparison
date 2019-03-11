@@ -4,3 +4,4 @@ test.sh
 *.pyc
 *.tmp
 results.csv
+au-suburbs-postcodes.csv
