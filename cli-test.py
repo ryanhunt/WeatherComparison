@@ -11,7 +11,7 @@ from tqdm import tqdm
 import os
 
 #a = AccuWeather(os.environ.get('ACCUWEATHER_API_KEY'))
-w = willyweather(os.environ.get('WILLWEATHER_API_KEY'))
+w = willyweather(os.environ.get('WILLYWEATHER_API_KEY'))
 a = AccuWeather(os.environ.get('ACCUWEATHER_API_KEY'))
 o = OpenWeatherMap(os.environ.get('OPENWEATHERMAP_API_KEY'))
 
