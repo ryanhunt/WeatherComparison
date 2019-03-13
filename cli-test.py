@@ -23,60 +23,61 @@ geolocator = Bing(os.environ.get('BING_API_KEY'))
 
 results = []
 
-# postcode, version, suburb, state
-# 0800,800,DARWIN,NT
+# postcode, suburb, state, lat, lon
+# 0800,DARWIN,NT, x, y
 
 #with open("addresses.csv", "r") as f:
-with open("au-suburbs-postcodes.csv", "r") as f:
+with open("au-suburbs-postcodes-coords.csv", "r") as f:
     num_rows = sum(1 for line in f)
     
 #with open("addresses.csv", "r") as infile:
-with open("au-suburbs-postcodes.csv", "r") as infile:
+with open("au-suburbs-postcodes-coords.csv", "r") as infile:
 	reader = csv.reader(infile)
 	next(reader)
 	for row in tqdm(reader, total = num_rows-1):
 		# process each row
 		#country = row[0]
 		country = "AU"
-		address = row[2] + " " + row[3] + " " + row[0]
+		address = row[1] + " " + row[2] + " " + row[0]
 		#address = row[1]
 		
-		try:
-			location = geolocator.geocode(address)
-		except:
-			location = None
-			pass
-		#print((location.latitude, location.longitude))
-		
-		#print ("Got this for %s: %s" % (address, location))
+		#
+		#try:
+		#	location = geolocator.geocode(address)
+		#except:
+		#	location = None
+		#	pass
+		##print((location.latitude, location.longitude))
+		#
+		##print ("Got this for %s: %s" % (address, location))
 
+		lat = row[3]
+		lon = row[4]
 		
-		if (location):
+		wKey = w.getLocationIDFromCoords(lat, lon)
+			
+		#print("wKey for %s is: %s" % (address, wKey))
 		
-			wKey = w.getLocationIDFromCoords(location.latitude, location.longitude)
-			
-			#print("wKey for %s is: %s" % (address, wKey))
-			
-			aKey = a.getLocationIDFromCoords(location.latitude, location.longitude)
-			
-			#print("aKey for %s is: %s" % (address, aKey))
-			#data = a.getCurrentConditions(aKey)
-			wData = w.getCurrentConditions(wKey)
-			oData = o.getCurrentConditions(location.latitude, location.longitude)
-			
-			if (aKey):
-				conditions = a.getCurrentConditions(aKey)
-			else:
-				conditions = None
+		aKey = a.getLocationIDFromCoords(lat, lon)
+		
+		#print("aKey for %s is: %s" % (address, aKey))
+		#data = a.getCurrentConditions(aKey)
+		wData = w.getCurrentConditions(wKey)
+		oData = o.getCurrentConditions(lat, lon)
+		
+		if (aKey):
+			conditions = a.getCurrentConditions(aKey)
+		else:
+			conditions = None
 				
 			
 		
 		timestamp = datetime.datetime.now()
 		
-		if (location and conditions):
-			data = {'timestamp': timestamp, 'country': country, 'address': address, 'lat': location.latitude, 'long': location.longitude, 'accuweather': conditions.getTemperature(), 'willyweather': wData['temperature'], 'openweathermap': oData}
+		if (conditions):
+			data = {'timestamp': timestamp, 'country': country, 'address': address, 'lat': lat, 'long': lon, 'accuweather': conditions.getTemperature(), 'willyweather': wData['temperature'], 'openweathermap': oData}
 		else:
-			data = {'timestamp': timestamp, 'country': country, 'address': address, 'lat': 0, 'long': 0, 'accuweather': 0, 'willyweather': 0, 'openweathermap': 0}
+			data = {'timestamp': timestamp, 'country': country, 'address': address, 'lat': lat, 'long': lon, 'accuweather': 0, 'willyweather': wData['temperature'], 'openweathermap': oData}
 			
 		results.append(data)
 		
